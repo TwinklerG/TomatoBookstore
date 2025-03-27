@@ -1,0 +1,25 @@
+package com.tomatobookstore.tomatobookstore.vo;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.io.Serializable;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class ResultVO<T> implements Serializable {
+    private Integer code;
+    private T data;
+
+    public static <T> ResultVO<T> buildSuccess(T data) {
+        return new ResultVO<T>(200, data);
+    }
+
+    public static <T> ResultVO<MessageVO> buildFailure(String message) {
+        return new ResultVO<MessageVO>(400, new MessageVO(message));
+    }
+}
