@@ -1,6 +1,5 @@
 package com.tomatobookstore.tomatobookstore.service;
 
-import com.tomatobookstore.tomatobookstore.vo.MessageVO;
 import com.tomatobookstore.tomatobookstore.vo.ProductVO;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +11,10 @@ public interface ProductService {
 
     ProductVO getProductById(String productId) throws Exception;
 
-    MessageVO updateProduct(ProductVO productVO) throws Exception;
+    void updateProduct(ProductVO productVO) throws Exception;
 
     ProductVO createProduct(ProductVO productVO) throws Exception;
 
-    MessageVO deleteProduct(String productId) throws Exception;
+    void deleteProduct(String productId) throws Exception;
 
 }

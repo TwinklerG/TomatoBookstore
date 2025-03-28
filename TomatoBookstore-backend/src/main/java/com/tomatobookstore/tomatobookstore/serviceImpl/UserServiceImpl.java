@@ -8,7 +8,6 @@ import com.tomatobookstore.tomatobookstore.repository.UserRepository;
 import com.tomatobookstore.tomatobookstore.service.UserService;
 import com.tomatobookstore.tomatobookstore.util.TokenUtil;
 import com.tomatobookstore.tomatobookstore.vo.LoginResultVO;
-import com.tomatobookstore.tomatobookstore.vo.MessageVO;
 import com.tomatobookstore.tomatobookstore.vo.RetUserVO;
 import com.tomatobookstore.tomatobookstore.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MessageVO createUser(UserVO user) {
+    public void createUser(UserVO user) {
         if(!Objects.equals(user.getRole(), "admin") && !Objects.equals(user.getRole(), "user") && !Objects.equals(user.getRole(), "staff"))
             throw TomatoBookstoreException.createFail();
         if (userRepository.findByUsername(user.getUsername()) != null) {
@@ -46,7 +45,6 @@ public class UserServiceImpl implements UserService {
         if(user.getEmail()!=null&&!Validator.isEmail(user.getEmail()))
             throw TomatoBookstoreException.createFail();
         userRepository.save(user.toPO());
-        return new MessageVO("创建用户成功");
     }
 
     @Override
@@ -60,12 +58,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MessageVO update(UserVO userVO) {
+    public void update(UserVO userVO) {
         try {
             User user=userRepository.findByUsername(userVO.getUsername());
             if(userVO.getName()!=null)
                 user.setName(userVO.getName());
-            userVO.setPassword(DigestUtil.sha512Hex(userVO.getUsername()+"-=[]"+userVO.getPassword()));
+            user.setPassword(DigestUtil.sha512Hex(userVO.getPassword()+"-=[]"+userVO.getUsername()));
             user.setAvatar(userVO.getAvatar());
             if(userVO.getTelephone() != null && (userVO.getTelephone().charAt(0) != '1' || userVO.getTelephone().length() != 11))
                 throw TomatoBookstoreException.updateFailed();
@@ -75,7 +73,6 @@ public class UserServiceImpl implements UserService {
             user.setEmail(userVO.getEmail());
             user.setLocation(userVO.getLocation());
             userRepository.save(user);
-            return new MessageVO("用户信息更新成功");
         } catch (Exception e) {
             throw TomatoBookstoreException.updateFailed();
         }

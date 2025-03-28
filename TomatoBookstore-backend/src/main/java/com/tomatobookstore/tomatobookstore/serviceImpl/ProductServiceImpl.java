@@ -8,7 +8,6 @@ import com.tomatobookstore.tomatobookstore.repository.ProductRepository;
 import com.tomatobookstore.tomatobookstore.repository.SpecificationRepository;
 import com.tomatobookstore.tomatobookstore.repository.StockpileRepository;
 import com.tomatobookstore.tomatobookstore.service.ProductService;
-import com.tomatobookstore.tomatobookstore.vo.MessageVO;
 import com.tomatobookstore.tomatobookstore.vo.ProductVO;
 import com.tomatobookstore.tomatobookstore.vo.SpecificationVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public MessageVO updateProduct(ProductVO productVO) throws Exception {
+    public void updateProduct(ProductVO productVO) throws Exception {
         try {
             if(productVO.getId()==null||productRepository.findByProductId(Integer.valueOf(productVO.getId()))==null)
                 throw TomatoBookstoreException.productNotExisted();
@@ -77,7 +76,6 @@ public class ProductServiceImpl implements ProductService {
                 for(SpecificationVO i:productVO.getSpecifications())
                     specificationRepository.save(i.toPO(product.getProductId()));
             productRepository.save(product);
-            return new MessageVO("更新成功");
         } catch (Exception e) {
             throw TomatoBookstoreException.productNotExisted();
         }
@@ -102,14 +100,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public MessageVO deleteProduct(String productId) throws Exception {
+    public void deleteProduct(String productId) throws Exception {
         try {
             if(productRepository.findByProductId(Integer.valueOf(productId))==null)
                 throw TomatoBookstoreException.productNotExisted();
             productRepository.deleteById(Integer.valueOf(productId));
             specificationRepository.deleteByProductId(Integer.valueOf(productId));
             stockpileRepository.deleteByProductId(Integer.valueOf(productId));
-            return new MessageVO("删除成功");
         } catch (Exception e) {
             throw TomatoBookstoreException.productNotExisted();
         }

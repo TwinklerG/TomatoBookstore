@@ -1,7 +1,6 @@
 package com.tomatobookstore.tomatobookstore.controller;
 
 import com.tomatobookstore.tomatobookstore.service.StockpileService;
-import com.tomatobookstore.tomatobookstore.vo.MessageVO;
 import com.tomatobookstore.tomatobookstore.vo.ResultVO;
 import com.tomatobookstore.tomatobookstore.vo.StockpileVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,13 @@ public class StockpileController {
     StockpileService stockpileService;
 
     @PatchMapping("/{productId}")
-    public ResultVO<MessageVO> patchStockpile(@PathVariable String productId, @RequestBody StockpileVO stockpileVO) throws Exception {
-        return ResultVO.buildSuccess(stockpileService.updateStockpile(productId,stockpileVO));
+    public ResultVO<String> patchStockpile(@PathVariable String productId, @RequestBody StockpileVO stockpileVO) throws Exception {
+        stockpileService.updateStockpile(productId,stockpileVO);
+        return ResultVO.buildSuccess("调整库存成功",null);
     }
 
     @GetMapping("/{productId}")
     public ResultVO<StockpileVO> getStockpile(@PathVariable String productId) throws Exception {
-        return ResultVO.buildSuccess(stockpileService.getStockpileById(productId));
+        return ResultVO.buildSuccess(stockpileService.getStockpileById(productId),null);
     }
 }

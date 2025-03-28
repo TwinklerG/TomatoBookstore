@@ -17,26 +17,29 @@ public class UserController {
 
     @GetMapping("/{username}")
     public ResultVO<RetUserVO> getUserDetail(@PathVariable String username) throws Exception {
-        return ResultVO.buildSuccess(userService.getUserDetail(username));
+        return ResultVO.buildSuccess(userService.getUserDetail(username),null);
     }
 
     @PostMapping("")
-    public ResultVO<MessageVO> createUser(@RequestBody UserVO userVO) {
-        return ResultVO.buildSuccess(userService.createUser(userVO));
+    public ResultVO<String> createUser(@RequestBody UserVO userVO) {
+        userService.createUser(userVO);
+        return ResultVO.buildSuccess("注册成功",null);
     }
 
     @PostMapping("/login")
-    public ResultVO<LoginResultVO> login(HttpServletResponse request, @RequestBody LoginVO loginVO) {
+    public ResultVO<String> login(HttpServletResponse request, @RequestBody LoginVO loginVO) {
         LoginResultVO result=userService.login(loginVO.getUsername(), loginVO.getPassword());
         Cookie cookie=new Cookie("token",result.getToken());
         cookie.setPath("/");
         cookie.setMaxAge(24*60*60);
         request.addCookie(cookie);
-        return ResultVO.buildSuccess(result);
+        request.addHeader("token",result.getToken());
+        return ResultVO.buildSuccess(result.getToken(),null);
     }
 
     @PutMapping("")
-    public ResultVO<MessageVO> update(@RequestBody UserVO userVO) {
-        return ResultVO.buildSuccess(userService.update(userVO));
+    public ResultVO<String> update(@RequestBody UserVO userVO) {
+        userService.update(userVO);
+        return ResultVO.buildSuccess("更新成功",null);
     }
 }

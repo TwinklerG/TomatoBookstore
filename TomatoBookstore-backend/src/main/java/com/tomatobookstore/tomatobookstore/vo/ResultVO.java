@@ -14,12 +14,16 @@ import java.io.Serializable;
 public class ResultVO<T> implements Serializable {
     private Integer code;
     private T data;
-
-    public static <T> ResultVO<T> buildSuccess(T data) {
-        return new ResultVO<T>(200, data);
+    private String msg;
+    public static <T> ResultVO<T> buildSuccess(T data,String msg) {
+        return new ResultVO<T>(200, data,msg);
     }
 
-    public static <T> ResultVO<MessageVO> buildFailure(String message) {
-        return new ResultVO<MessageVO>(400, new MessageVO(message));
+    public static <T> ResultVO<String> buildFailure(String msg) {
+        return new ResultVO<String>(400, null,msg);
+    }
+
+    public static <T> ResultVO<String> buildNotLogin(String msg) {
+        return new ResultVO<String>(401, null,msg);
     }
 }
