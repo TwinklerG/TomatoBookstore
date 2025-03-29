@@ -23,25 +23,26 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-                             @NonNull Object handler) {
-        Cookie[] cookies=request.getCookies();
-        if(cookies==null)
+            @NonNull Object handler) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null)
             throw TomatoBookstoreException.loginRequired();
-        String token=null;
-        for(Cookie cookie:cookies)
-        {
-            if(Objects.equals(cookie.getName(), "token"))
-            {
-                token=cookie.getValue();
+        String token = null;
+        for (Cookie cookie : cookies) {
+            if (Objects.equals(cookie.getName(), "token")) {
+                token = cookie.getValue();
                 break;
             }
         }
+        System.out.println(token);
         if (token != null && tokenUtil.vertifyToken(token)) {
             // For Frontend to get Information about current User
-            // request.getSession().setAttribute("currentUser", tokenUtil.getUser(token));
+            // request.getSession().setAttribute("currentUser",
+            // tokenUtil.getUser(token));
             return true;
         } else {
             throw TomatoBookstoreException.loginRequired();
         }
+        // return true;
     }
 }
